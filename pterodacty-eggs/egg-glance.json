@@ -1,0 +1,52 @@
+{
+    "_comment": "DO NOT EDIT: FILE GENERATED AUTOMATICALLY BY PTERODACTYL PANEL - PTERODACTYL.IO",
+    "meta": {
+        "version": "PTDL_v2",
+        "update_url": null
+    },
+    "exported_at": "2024-10-12T13:36:29+06:00",
+    "name": "glance",
+    "author": "kafitowsif@gmail.com",
+    "description": "A self-hosted dashboard that puts all your feeds in one place",
+    "features": null,
+    "docker_images": {
+        "ghcr.io\/pterodactyl\/yolks:alpine": "ghcr.io\/pterodactyl\/yolks:alpine"
+    },
+    "file_denylist": [],
+    "startup": ".\/glance",
+    "config": {
+        "files": "{\r\n    \"glance.yml\": {\r\n        \"parser\": \"yaml\",\r\n        \"find\": {\r\n            \"server.port\": \"{{server.build.default.port}}\",\r\n            \"server.assets-path\": \"{{env.ASSETS_PATH}}\",\r\n            \"server.base-url\": \"{{env.BASE_URL}}\"\r\n        }\r\n    }\r\n}",
+        "startup": "{\r\n    \"done\": \"Starting server\"\r\n}",
+        "logs": "{}",
+        "stop": "^C"
+    },
+    "scripts": {
+        "installation": {
+            "script": "#!\/bin\/ash\r\n\r\ncd \/mnt\/server\r\nwget -O glance-linux-amd64.tar.gz $(curl -s https:\/\/api.github.com\/repos\/glanceapp\/glance\/releases\/latest  | \\\r\n jq -r '.assets[] | select(.name | contains (\"linux-amd64\")) | .browser_download_url')\r\n\r\nconfig=$(cat <<EOF\r\npages:\r\n    - columns:\r\n        - size: small\r\n          widgets:\r\n            - type: calendar\r\n            - cache: 3h\r\n              collapse-after: 3\r\n              feeds:\r\n                - url: https:\/\/ciechanow.ski\/atom.xml\r\n                - title: Josh Comeau\r\n                  url: https:\/\/www.joshwcomeau.com\/rss.xml\r\n                - url: https:\/\/samwho.dev\/rss.xml\r\n                - url: https:\/\/awesomekling.github.io\/feed.xml\r\n                - title: Ahmad Shadeed\r\n                  url: https:\/\/ishadeed.com\/feed.xml\r\n              limit: 10\r\n              type: rss\r\n            - channels:\r\n                - theprimeagen\r\n                - cohhcarnage\r\n                - christitustech\r\n                - blurbs\r\n                - asmongold\r\n                - jembawls\r\n              type: twitch-channels\r\n        - size: full\r\n          widgets:\r\n            - type: hacker-news\r\n            - channels:\r\n                - UCR-DXc1voovS8nhAvccRZhg\r\n                - UCv6J_jJa8GJqFwQNgNrMuww\r\n                - UCOk-gHyjcWZNj3Br4oxwh0A\r\n              type: videos\r\n            - subreddit: selfhosted\r\n              type: reddit\r\n        - size: small\r\n          widgets:\r\n            - location: London, United Kingdom\r\n              type: weather\r\n            - markets:\r\n                - name: S&P 500\r\n                  symbol: SPY\r\n                - name: Bitcoin\r\n                  symbol: BTC-USD\r\n                - name: NVIDIA\r\n                  symbol: NVDA\r\n                - name: Apple\r\n                  symbol: AAPL\r\n                - name: Microsoft\r\n                  symbol: MSFT\r\n                - name: Google\r\n                  symbol: GOOGL\r\n                - name: AMD\r\n                  symbol: AMD\r\n                - name: Reddit\r\n                  symbol: RDDT\r\n              type: markets\r\n      name: Home\r\nEOF\r\n)\r\n\r\nif [ ! -f \/mnt\/server\/glance.yml ]; then\r\n    echo \"Writing example config...\"\r\n    echo \"$config\" > glance.yml\r\nelse\r\n    echo \"Config file exists.. : glance.yml\"\r\nfi\r\n\r\ntar -zxvf glance-linux-amd64.tar.gz",
+            "container": "ghcr.io\/pterodactyl\/installers:alpine",
+            "entrypoint": "ash"
+        }
+    },
+    "variables": [
+        {
+            "name": "Asset Path",
+            "description": "The path to a directory that will be served by the server under the \/assets\/ path. This is handy for widgets like the Monitor where you have to specify an icon URL and you want to self host all the icons rather than pointing to an external source.",
+            "env_variable": "ASSETS_PATH",
+            "default_value": "\/home\/container\/assets",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|string|max:100",
+            "field_type": "text"
+        },
+        {
+            "name": "Base URL",
+            "description": "The base URL that Glance is hosted under. No need to specify this unless you're using a reverse proxy and are hosting Glance under a directory. If that's the case then you can set this value to \/glance or whatever the directory is called. Note that the forward slash (\/) in the beginning is required unless you specify the full domain and path.",
+            "env_variable": "BASE_URL",
+            "default_value": "\/",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|string|max:100",
+            "field_type": "text"
+        }
+    ]
+}

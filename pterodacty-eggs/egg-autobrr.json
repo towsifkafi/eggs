@@ -1,0 +1,31 @@
+{
+    "_comment": "DO NOT EDIT: FILE GENERATED AUTOMATICALLY BY PTERODACTYL PANEL - PTERODACTYL.IO",
+    "meta": {
+        "version": "PTDL_v2",
+        "update_url": null
+    },
+    "exported_at": "2024-10-13T13:03:58+06:00",
+    "name": "autobrr",
+    "author": "kafitowsif@gmail.com",
+    "description": "Modern, easy to use download automation for torrents and usenet.",
+    "features": null,
+    "docker_images": {
+        "ghcr.io\/pterodactyl\/yolks:alpine": "ghcr.io\/pterodactyl\/yolks:alpine"
+    },
+    "file_denylist": [],
+    "startup": ".\/autobrr --config=\/home\/container\/config",
+    "config": {
+        "files": "{\r\n    \"config\/config.toml\": {\r\n        \"parser\": \"file\",\r\n        \"find\": {\r\n            \"host = \": \"host = \\\"0.0.0.0\\\"\",\r\n            \"port = \": \"port = {{server.build.default.port}}\"\r\n        }\r\n    }\r\n}",
+        "startup": "{\r\n    \"done\": \"Listening on [::]:\"\r\n}",
+        "logs": "{}",
+        "stop": "^C"
+    },
+    "scripts": {
+        "installation": {
+            "script": "#!\/bin\/ash\r\n\r\ncd \/mnt\/server\r\nwget -O autobrr_1.47.1_linux_x86_64.tar.gz $(curl -s https:\/\/api.github.com\/repos\/autobrr\/autobrr\/releases\/latest  | \\\r\n jq -r '.assets[] | select(.name | contains (\"linux_x86_64.tar.gz\")) | .browser_download_url')\r\n \r\ntar -xvzf autobrr_1.47.1_linux_x86_64.tar.gz\r\n\r\nrm README.md\r\nrm autobrr_1.47.1_linux_x86_64.tar.gz\r\n\r\nmkdir config\r\ncd config\r\nwget https:\/\/raw.githubusercontent.com\/autobrr\/autobrr\/refs\/heads\/develop\/config.toml",
+            "container": "ghcr.io\/pterodactyl\/installers:alpine",
+            "entrypoint": "ash"
+        }
+    },
+    "variables": []
+}

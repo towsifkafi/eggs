@@ -1,0 +1,62 @@
+{
+    "_comment": "DO NOT EDIT: FILE GENERATED AUTOMATICALLY BY PTERODACTYL PANEL - PTERODACTYL.IO",
+    "meta": {
+        "version": "PTDL_v2",
+        "update_url": null
+    },
+    "exported_at": "2024-10-12T13:37:01+06:00",
+    "name": "filebrowser",
+    "author": "kafitowsif@gmail.com",
+    "description": "Middleware or standalone app that provides a web-based file manager within a specified directory.",
+    "features": null,
+    "docker_images": {
+        "ghcr.io\/pterodactyl\/yolks:alpine": "ghcr.io\/pterodactyl\/yolks:alpine"
+    },
+    "file_denylist": [],
+    "startup": ".\/filebrowser -c settings.json",
+    "config": {
+        "files": "{\r\n    \"settings.json\": {\r\n        \"parser\": \"json\",\r\n        \"find\": {\r\n            \"port\": \"{{server.build.default.port}}\",\r\n            \"baseURL\": \"{{env.BASE_URL}}\",\r\n            \"database\": \"{{env.DATABASE_FILE}}\",\r\n            \"root\": \"{{env.ROOT_FOLDER}}\"\r\n        }\r\n    }\r\n}",
+        "startup": "{\r\n    \"done\": \"Listening on\"\r\n}",
+        "logs": "{}",
+        "stop": "^C"
+    },
+    "scripts": {
+        "installation": {
+            "script": "#!\/bin\/ash\r\n\r\ncd \/mnt\/server\r\nwget -O linux-amd64-filebrowser.tar.gz $(curl -s https:\/\/api.github.com\/repos\/filebrowser\/filebrowser\/releases\/latest  | \\\r\n jq -r '.assets[] | select(.name | contains (\"linux-amd64\")) | .browser_download_url')\r\n \r\ntar -zxvf linux-amd64-filebrowser.tar.gz\r\n\r\nmkdir files\r\nmkdir database\r\n\r\nrm CHANGELOG.md\r\nrm README.md\r\nrm LICENSE\r\nrm linux-amd64-filebrowser.tar.gz\r\n\r\nwget -O settings.json https:\/\/raw.githubusercontent.com\/filebrowser\/filebrowser\/refs\/heads\/master\/docker\/root\/defaults\/settings.json",
+            "container": "ghcr.io\/pterodactyl\/installers:alpine",
+            "entrypoint": "ash"
+        }
+    },
+    "variables": [
+        {
+            "name": "Root Folder",
+            "description": "",
+            "env_variable": "ROOT_FOLDER",
+            "default_value": "\/home\/container\/files",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|string|max:100",
+            "field_type": "text"
+        },
+        {
+            "name": "Database File",
+            "description": "",
+            "env_variable": "DATABASE_FILE",
+            "default_value": "database\/filebrowser.db",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|string|max:100",
+            "field_type": "text"
+        },
+        {
+            "name": "Base URL",
+            "description": "",
+            "env_variable": "BASE_URL",
+            "default_value": "",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|string|max:100",
+            "field_type": "text"
+        }
+    ]
+}

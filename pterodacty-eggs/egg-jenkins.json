@@ -1,0 +1,31 @@
+{
+    "_comment": "DO NOT EDIT: FILE GENERATED AUTOMATICALLY BY PTERODACTYL PANEL - PTERODACTYL.IO",
+    "meta": {
+        "version": "PTDL_v2",
+        "update_url": null
+    },
+    "exported_at": "2024-10-13T19:19:08+06:00",
+    "name": "Jenkins",
+    "author": "kafitowsif@gmail.com",
+    "description": "An open source automation server which enables developers around the world to reliably build, test, and deploy their software.",
+    "features": null,
+    "docker_images": {
+        "ghcr.io\/pterodactyl\/yolks:java_21": "ghcr.io\/pterodactyl\/yolks:java_21"
+    },
+    "file_denylist": [],
+    "startup": "java -Dinteractive -Djava.io.tmpdir=\/home\/container\/.tmp -jar jenkins.war --httpPort={{SERVER_PORT}}",
+    "config": {
+        "files": "{}",
+        "startup": "{\r\n    \"done\": \"Completed initialization\"\r\n}",
+        "logs": "{}",
+        "stop": "^C"
+    },
+    "scripts": {
+        "installation": {
+            "script": "#!\/bin\/ash\r\n\r\ncd \/mnt\/server\r\nmkdir .tmp\r\n\r\nwget -O jenkins.war https:\/\/get.jenkins.io\/war\/latest\/jenkins.war",
+            "container": "ghcr.io\/pterodactyl\/installers:alpine",
+            "entrypoint": "ash"
+        }
+    },
+    "variables": []
+}

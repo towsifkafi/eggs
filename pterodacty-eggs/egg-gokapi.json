@@ -1,0 +1,31 @@
+{
+    "_comment": "DO NOT EDIT: FILE GENERATED AUTOMATICALLY BY PTERODACTYL PANEL - PTERODACTYL.IO",
+    "meta": {
+        "version": "PTDL_v2",
+        "update_url": null
+    },
+    "exported_at": "2024-10-13T12:28:38+06:00",
+    "name": "Gokapi",
+    "author": "kafitowsif@gmail.com",
+    "description": "Lightweight selfhosted Firefox Send alternative without public upload. AWS S3 supported.",
+    "features": null,
+    "docker_images": {
+        "ghcr.io\/pterodactyl\/yolks:alpine": "ghcr.io\/pterodactyl\/yolks:alpine"
+    },
+    "file_denylist": [],
+    "startup": "GOKAPI_PORT={{SERVER_PORT}} .\/gokapi-linux_amd64",
+    "config": {
+        "files": "{}",
+        "startup": "{\r\n    \"done\": \"Webserver can be accessed\"\r\n}",
+        "logs": "{}",
+        "stop": "^C"
+    },
+    "scripts": {
+        "installation": {
+            "script": "#!\/bin\/ash\r\n\r\ncd \/mnt\/server\r\nwget -O gokapi-linux_amd64.zip $(curl -s https:\/\/api.github.com\/repos\/Forceu\/Gokapi\/releases\/latest  | \\\r\n jq -r '.assets[] | select(.name | contains (\"linux_amd64\")) | .browser_download_url')\r\n \r\nunzip gokapi-linux_amd64.zip\r\nrm gokapi-linux_amd64.zip",
+            "container": "ghcr.io\/pterodactyl\/installers:alpine",
+            "entrypoint": "ash"
+        }
+    },
+    "variables": []
+}

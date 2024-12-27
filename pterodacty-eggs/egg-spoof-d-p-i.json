@@ -1,0 +1,52 @@
+{
+    "_comment": "DO NOT EDIT: FILE GENERATED AUTOMATICALLY BY PTERODACTYL PANEL - PTERODACTYL.IO",
+    "meta": {
+        "version": "PTDL_v2",
+        "update_url": null
+    },
+    "exported_at": "2024-10-14T12:39:57+06:00",
+    "name": "SpoofDPI",
+    "author": "kafitowsif@gmail.com",
+    "description": "A simple and fast anti-censorship tool written in Go",
+    "features": null,
+    "docker_images": {
+        "ghcr.io\/pterodactyl\/yolks:alpine": "ghcr.io\/pterodactyl\/yolks:alpine"
+    },
+    "file_denylist": [],
+    "startup": ".\/spoofdpi -addr 0.0.0.0 -dns-addr {{DNS_ADDRESS}} -dns-port {{DNS_PORT}} -port {{SERVER_PORT}} -debug",
+    "config": {
+        "files": "{}",
+        "startup": "{}",
+        "logs": "{}",
+        "stop": "^C"
+    },
+    "scripts": {
+        "installation": {
+            "script": "#!\/bin\/ash\r\n\r\ncd \/mnt\/server\r\nwget -O spoofdpi-linux-amd64.tar.gz $(curl -s https:\/\/api.github.com\/repos\/xvzc\/SpoofDPI\/releases\/latest  | \\\r\n jq -r '.assets[] | select(.name | contains (\"linux-amd64\")) | .browser_download_url')\r\n\r\ntar -zxvf spoofdpi-linux-amd64.tar.gz\r\nrm spoofdpi-linux-amd64.tar.gz",
+            "container": "ghcr.io\/pterodactyl\/installers:alpine",
+            "entrypoint": "ash"
+        }
+    },
+    "variables": [
+        {
+            "name": "Default DNS Server",
+            "description": "",
+            "env_variable": "DNS_ADDRESS",
+            "default_value": "8.8.8.8",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|string|max:100",
+            "field_type": "text"
+        },
+        {
+            "name": "Default DNS Server Port",
+            "description": "",
+            "env_variable": "DNS_PORT",
+            "default_value": "53",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|string|max:20",
+            "field_type": "text"
+        }
+    ]
+}

@@ -1,0 +1,82 @@
+{
+    "_comment": "DO NOT EDIT: FILE GENERATED AUTOMATICALLY BY PTERODACTYL PANEL - PTERODACTYL.IO",
+    "meta": {
+        "version": "PTDL_v2",
+        "update_url": null
+    },
+    "exported_at": "2024-10-13T21:44:23+06:00",
+    "name": "reproxy",
+    "author": "kafitowsif@gmail.com",
+    "description": "Simple edge server \/ reverse proxy",
+    "features": null,
+    "docker_images": {
+        "ghcr.io\/pterodactyl\/yolks:alpine": "ghcr.io\/pterodactyl\/yolks:alpine"
+    },
+    "file_denylist": [],
+    "startup": ".\/reproxy --file.enabled --file.name=config.yml --listen=0.0.0.0:{{SERVER_PORT}}",
+    "config": {
+        "files": "{}",
+        "startup": "{\r\n    \"done\": \"activate http proxy server on\"   \r\n}",
+        "logs": "{}",
+        "stop": "^C"
+    },
+    "scripts": {
+        "installation": {
+            "script": "#!\/bin\/ash\r\n\r\ncd \/mnt\/server\r\nwget -O reproxy_v1.2.2_linux_amd64.tar.gz $(curl -s https:\/\/api.github.com\/repos\/umputun\/reproxy\/releases\/latest  | \\\r\n jq -r '.assets[] | select(.name | contains (\"linux_amd64.tar.gz\")) | .browser_download_url')\r\n \r\ntar -zxvf reproxy_v1.2.2_linux_amd64.tar.gz\r\n\r\nrm reproxy_v1.2.2_linux_amd64.tar.gz\r\nrm README.md",
+            "container": "ghcr.io\/pterodactyl\/installers:alpine",
+            "entrypoint": "ash"
+        }
+    },
+    "variables": [
+        {
+            "name": "Enable Gzip",
+            "description": "enable gz compression",
+            "env_variable": "GZIP",
+            "default_value": "1",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|boolean",
+            "field_type": "text"
+        },
+        {
+            "name": "Skip SSL verification",
+            "description": "skip SSL verification on destination host",
+            "env_variable": "INSECURE",
+            "default_value": "0",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|boolean",
+            "field_type": "text"
+        },
+        {
+            "name": "Enable Logging",
+            "description": "enable access and error rotated logs",
+            "env_variable": "LOGGER_ENABLED",
+            "default_value": "1",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|boolean",
+            "field_type": "text"
+        },
+        {
+            "name": "Log to stdout",
+            "description": "enable stdout logging",
+            "env_variable": "LOGGER_STDOUT",
+            "default_value": "1",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|boolean",
+            "field_type": "text"
+        },
+        {
+            "name": "Log file",
+            "description": "location of access log (default: access.log)",
+            "env_variable": "LOGGER_FILE",
+            "default_value": "access.log",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|string|max:100",
+            "field_type": "text"
+        }
+    ]
+}

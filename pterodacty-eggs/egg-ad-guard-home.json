@@ -1,0 +1,42 @@
+{
+    "_comment": "DO NOT EDIT: FILE GENERATED AUTOMATICALLY BY PTERODACTYL PANEL - PTERODACTYL.IO",
+    "meta": {
+        "version": "PTDL_v2",
+        "update_url": null
+    },
+    "exported_at": "2024-10-12T15:37:37+06:00",
+    "name": "AdGuard Home",
+    "author": "kafitowsif@gmail.com",
+    "description": "Network-wide ads & trackers blocking DNS server",
+    "features": null,
+    "docker_images": {
+        "ghcr.io\/pterodactyl\/yolks:alpine": "ghcr.io\/pterodactyl\/yolks:alpine"
+    },
+    "file_denylist": [],
+    "startup": ".\/AdGuardHome",
+    "config": {
+        "files": "{\r\n    \"AdGuardHome.yaml\": {\r\n        \"parser\": \"yaml\",\r\n        \"find\": {\r\n            \"http.address\": \"0.0.0.0:{{server.build.default.port}}\",\r\n            \"dns.port\": \"{{env.DNS_PORT}}\"\r\n        }\r\n    }\r\n}",
+        "startup": "{\r\n    \"done\": \"AdGuard Home is available at the following addresses\"\r\n}",
+        "logs": "{}",
+        "stop": "^C"
+    },
+    "scripts": {
+        "installation": {
+            "script": "#!\/bin\/ash\r\n\r\ncd \/mnt\/server\r\nwget -O AdGuardHome_linux_amd64.tar.gz $(curl -s https:\/\/api.github.com\/repos\/AdguardTeam\/AdGuardHome\/releases\/latest  | \\\r\n jq -r '.assets[] | select(.name | contains (\"linux_amd64\")) | .browser_download_url')\r\n \r\ntar --strip-components=2 -xvf AdGuardHome_linux_amd64.tar.gz\r\n\r\nrm AdGuardHome_linux_amd64.tar.gz\r\nrm CHANGELOG.md\r\nrm README.md",
+            "container": "ghcr.io\/pterodactyl\/installers:alpine",
+            "entrypoint": "ash"
+        }
+    },
+    "variables": [
+        {
+            "name": "DNS Port",
+            "description": "Port number for the DNS server to start on. (secondary port assigned to the server)",
+            "env_variable": "DNS_PORT",
+            "default_value": "2000",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|string|max:20",
+            "field_type": "text"
+        }
+    ]
+}

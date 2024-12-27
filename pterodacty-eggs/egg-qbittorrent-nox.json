@@ -1,0 +1,31 @@
+{
+    "_comment": "DO NOT EDIT: FILE GENERATED AUTOMATICALLY BY PTERODACTYL PANEL - PTERODACTYL.IO",
+    "meta": {
+        "version": "PTDL_v2",
+        "update_url": null
+    },
+    "exported_at": "2024-10-12T13:36:56+06:00",
+    "name": "qbittorrent-nox",
+    "author": "kafitowsif@gmail.com",
+    "description": "qBittorrent-nox is a headless BitTorrent client, perfect for installing on a headless server, and accessing it using web interface from another device.",
+    "features": null,
+    "docker_images": {
+        "ghcr.io\/pterodactyl\/yolks:alpine": "ghcr.io\/pterodactyl\/yolks:alpine"
+    },
+    "file_denylist": [],
+    "startup": ".\/qbittorrent-nox --save-path=\/home\/container\/torrents --webui-port={{SERVER_PORT}}",
+    "config": {
+        "files": "{\r\n    \".config\/qBittorrent\/qBittorrent.conf\": {\r\n        \"parser\": \"ini\",\r\n        \"find\": {\r\n            \"LegalNotice.Accepted\": \"true\"\r\n        }\r\n    }\r\n}",
+        "startup": "{\r\n    \"done\": \"access the WebUI at:\"   \r\n}",
+        "logs": "{}",
+        "stop": "^C"
+    },
+    "scripts": {
+        "installation": {
+            "script": "#!\/bin\/ash\r\nmkdir \/mnt\/server\/torrents\r\n\r\ncd \/mnt\/server\r\n\r\necho \"Downloading qbitorrent-nox....\"\r\nwget -O qbittorrent-nox $(curl -s https:\/\/api.github.com\/repos\/userdocs\/qbittorrent-nox-static\/releases\/latest  | \\\r\n jq -r '.assets[] | select(.name | contains (\"x86_64\")) | .browser_download_url')\r\n\r\nchmod +x qbittorrent-nox\r\n\r\necho \"done\"",
+            "container": "ghcr.io\/pterodactyl\/installers:alpine",
+            "entrypoint": "ash"
+        }
+    },
+    "variables": []
+}
